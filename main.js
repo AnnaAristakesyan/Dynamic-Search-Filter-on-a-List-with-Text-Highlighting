@@ -39,12 +39,18 @@ function showList(book, inputValue){
     book.forEach(elem => {
         let title = hilghlight(elem.title, inputValue);
         let author = hilghlight(elem.author, inputValue);
-        container.appendChild(document.createElement('p')).textContent = `Title : ${title}, Author : ${author}`
+        if(inputValue){
+            let newItem = document.createElement('p');
+            container.appendChild(newItem).innerHTML = `Title : ${title}, Author : ${author}` 
+        }else{
+            let newItem = document.createElement('p');
+            container.appendChild(newItem).innerHTML = `Title : ${title}, Author : ${author}`
+        }
     });
 } 
 
 function hilghlight(text, inputValue){
     if (!inputValue) return text;
     let search = new RegExp(inputValue, 'gi');
-  return text.replace(search, '<span class = "highlight">$&</span>');
+    return text.replace(search, '<span class = "highlight">$&</span>');
 }
