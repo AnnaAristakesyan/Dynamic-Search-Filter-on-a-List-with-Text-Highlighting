@@ -45,6 +45,6 @@ function showList(book, inputValue){
 
 function hilghlight(text, inputValue){
     if (!inputValue) return text;
-    const search = new RegExp(`(${inputValue})`, 'gi');
-  return text.replace(search, '<span>$&</span>');
+    let search = new RegExp(inputValue, 'gi');
+  return text.replace(search, '<span class = "highlight">$&</span>');
 }
