@@ -1,5 +1,6 @@
 let container =  document.querySelector('.lists');
 let inputField = document.querySelector('input');
+let clearButton = document.querySelector('#clearButton')
 
 const books = [
     { id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", year: 1925 },
@@ -19,10 +20,11 @@ const books = [
 
 showList(books)
 
-inputField.addEventListener('input', update);
+inputField.addEventListener('input', debounce(update, 300));
+clearButton.addEventListener('click', clearSearchResult)
 
 function update(){
-    let inputValue = inputField.value.toLowerCase();
+    let inputValue = inputField.value.trim().toLowerCase();
     let filtered = books.filter(elem =>
      elem.title.toLowerCase().includes(inputValue) || elem.author.toLowerCase().includes(inputValue)
     );
@@ -39,13 +41,9 @@ function showList(book, inputValue){
     book.forEach(elem => {
         let title = hilghlight(elem.title, inputValue);
         let author = hilghlight(elem.author, inputValue);
-        if(inputValue){
-            let newItem = document.createElement('p');
-            container.appendChild(newItem).innerHTML = `Title : ${title}, Author : ${author}` 
-        }else{
-            let newItem = document.createElement('p');
-            container.appendChild(newItem).innerHTML = `Title : ${title}, Author : ${author}`
-        }
+        let newItem = document.createElement('p');
+        container.appendChild(newItem).innerHTML = `Title : ${title}, Author : ${author}` 
+        
     });
 } 
 
@@ -53,4 +51,18 @@ function hilghlight(text, inputValue){
     if (!inputValue) return text;
     let search = new RegExp(inputValue, 'gi');
     return text.replace(search, '<span class = "highlight">$&</span>');
+}
+
+function clearSearchResult(){
+    inputField.value = '';
+    update();
+}
+
+function debounce(func, timeout = 300){
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func.apply(this, args); }, timeout);
+    };
 }
